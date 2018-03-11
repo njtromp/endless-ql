@@ -1,0 +1,38 @@
+component_depth: 1
+languages:
+- scala
+
+exclude:
+- Abel_Elias
+- Alireza
+- Andras_Thijs
+- Arjan_Niels
+- Carly_Michael
+- DogeQL
+- Erik_Vincent
+- ForcePush
+- GunOli
+- Ioana_Hisham
+- JS
+- Joanna_Laurence
+- Jordy_Dennis
+- Jorick_Mihai
+- Kazan
+- LDG_TV
+- PyQuest
+- Pythonistas
+- Rasha_Toine
+- Remi_Hasan
+- Rob_Jaap
+- SeaFence_Lars_Timo
+- YouDontMakeFriendsWithDotNet
+- cornelius
+- durmitor
+- henk
+- karra_takacs
+- nitpickers
+- ouweh-vdwerf
+- piotr
+- prototypes
+- qhwcz
+- schneider_kalf
