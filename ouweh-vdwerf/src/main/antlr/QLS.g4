@@ -8,9 +8,10 @@ stylesheet
     :   'stylesheet' id=ID OPEN_BRACKET page+ CLOSE_BRACKET
     ;
 
-page: 'page' id=ID OPEN_BRACKET segment+ defaultStatement* CLOSE_BRACKET;
+page: 'page' ID OPEN_BRACKET segment+ defaultStatement* CLOSE_BRACKET;
 
-section: 'section' id=ID OPEN_BRACKET segment+ defaultStatement* CLOSE_BRACKET;
+section: 'section' id=STRING OPEN_BRACKET segment+ defaultStatement* CLOSE_BRACKET
+       ;
 
 segment: question
        | section
@@ -26,11 +27,12 @@ question: 'question' id=ID widget?
 
 widget: 'widget' widgetType;
 
-widgetType: 'radio' OPEN_PARENTH yes=STRING',' no=STRING CLOSE_PARENTH                     # radioType
-          | 'checkbock' OPEN_PARENTH yes=STRING CLOSE_PARENTH                              # checkboxType
-          | 'dropdown' OPEN_PARENTH yes=STRING',' no=STRING CLOSE_PARENTH                  # dropdownType
-          | 'slider' OPEN_PARENTH start=NUMBER',' end=NUMBER',' step=NUMBER CLOSE_PARENTH  # sliderType
-          | 'text'                                                                         # textType
+widgetType: 'radio' (OPEN_PARENTH yes=STRING',' no=STRING CLOSE_PARENTH)?                     # radioType
+          | 'checkbox' (OPEN_PARENTH yes=STRING CLOSE_PARENTH)?                               # checkboxType
+          | 'dropdown' (OPEN_PARENTH yes=STRING',' no=STRING CLOSE_PARENTH)?                  # dropdownType
+          | 'slider' OPEN_PARENTH start=NUMBER',' end=NUMBER',' step=NUMBER CLOSE_PARENTH     # sliderType
+          | 'text'                                                                            # textType
+          | 'spinbox'                                                                         # spinboxType
           ;
 
 type
@@ -40,20 +42,22 @@ type
     | 'string'                                                              #stringType
     ;
 
-style: OPEN_BRACKET styleProperty+ CLOSE_BRACKET;
+style: OPEN_BRACKET styleProperty+ widget? CLOSE_BRACKET;
 
-styleProperty: property=STRING ':' value
-             | widget
+styleProperty: property=ID ':' value
              ;
 
 value: STRING
      | NUMBER
+     | COLOR
      ;
 
 
 ID:   [a-zA-Z_]+[a-zA-Z0-9_]*;
 
 STRING: '"' .*? '"';
+
+COLOR : '#' ('0'..'9' | 'a'..'f')+;
 
 NUMBER
     :   '-'? ('0'..'9')+ ('.' ('0'..'9')+)?

@@ -81,17 +81,19 @@ public class Value {
 	}
 
 	public Value(Type type, String string) {
-	
+
 		this.type = type;
 		this.text = string;
 	}
 
 	private Value(boolean condition) {
+
 		this.type = Type.Boolean;
 		this.text = condition ? "True" : "False";
 	}
 
 	private String getText() {
+
 		return text;
 	}
 
@@ -106,10 +108,13 @@ public class Value {
 
 			case "Integer-Integer":
 				return new Value( Type.Integer,
-						String.format( "%d", (Integer.parseInt( text_left ) * Integer.parseInt( text_right )) ) );
+						Integer.toString( Integer.parseInt( text_left ) * Integer.parseInt( text_right ) ) );
+
 			case "Integer-Money":
-				return new Value( Type.Money, String.format( "%d",
-						(new BigDecimal( text_right ).multiply( new BigDecimal( Integer.parseInt( text_left ) ) )) ) );
+				return new Value( Type.Money, Double.toString(
+						(new BigDecimal( text_right ).multiply( new BigDecimal( Integer.parseInt( text_left ) ) ))
+								.doubleValue() ) );
+
 			case "Money-Integer":
 				return new Value( Type.Money, Double.toString( (new BigDecimal( text_left )
 						.multiply( new BigDecimal( Integer.parseInt( text_right ) ) ).doubleValue()) ) );
@@ -119,6 +124,7 @@ public class Value {
 	}
 
 	private Value divided_by( Value rightOperand ) {
+		
 		Type type_right = rightOperand.getType();
 		Type type_left = this.getType();
 		String text_left = this.getText();
@@ -128,10 +134,13 @@ public class Value {
 
 			case "Integer-Integer":
 				return new Value( Type.Integer,
-						String.format( "%d", (Integer.parseInt( text_left ) / Integer.parseInt( text_right )) ) );
+						Integer.toString( (Integer.parseInt( text_left ) / Integer.parseInt( text_right )) ) );
+
 			case "Money-Integer":
-				return new Value( Type.Money, String.format( "%d",
-						(new BigDecimal( text_left ).divide( new BigDecimal( Integer.parseInt( text_right ) ) )) ) );
+				return new Value( Type.Money,
+						Double.toString(
+								(new BigDecimal( text_left ).divide( new BigDecimal( Integer.parseInt( text_right ) ) ))
+										.doubleValue() ) );
 
 		}
 		throw new RuntimeException( "Check Antlr grammar. Operation impossible" );
@@ -150,11 +159,16 @@ public class Value {
 			case "Date-Integer":
 				return new Value( Type.Date, dateToString(
 						new Date( dateStringToLong( text_left ) + 24 * 60 * 60 * 1000 * new Long( text_right ) ) ) );
+
 			case "Integer-Integer":
 				return new Value( Type.Integer,
-						String.format( "%d", (Integer.parseInt( text_left ) + Integer.parseInt( text_right )) ) );
+						Integer.toString( (Integer.parseInt( text_left ) + Integer.parseInt( text_right )) ) );
+
 			case "Money-Money":
 				return new Value( Type.Money, "" + new BigDecimal( text_left ).add( new BigDecimal( text_right ) ) );
+
+			case "String-Integer":
+			case "String-Money":
 			case "String-String":
 				return new Value( Type.String, text_left + text_right );
 
@@ -174,10 +188,13 @@ public class Value {
 		switch (type_left + "-" + type_right) {
 
 			case "Date-Integer":
-				break;
+				return new Value( Type.Date, dateToString(
+						new Date( dateStringToLong( text_left ) - 24 * 60 * 60 * 1000 * new Long( text_right ) ) ) );
+
 			case "Integer-Integer":
 				return new Value( Type.Integer,
-						String.format( "%d", (Integer.parseInt( text_left ) - Integer.parseInt( text_right )) ) );
+						Integer.toString( (Integer.parseInt( text_left ) - Integer.parseInt( text_right )) ) );
+
 			case "Money-Money":
 				return new Value( Type.Money, Double.toString(
 						new BigDecimal( text_left ).subtract( new BigDecimal( text_right ) ).doubleValue() ) );
@@ -186,6 +203,7 @@ public class Value {
 	}
 
 	private Value conjuncted_with( Value rightOperand ) {
+
 		Type type_right = rightOperand.getType();
 		Type type_left = this.getType();
 
@@ -199,6 +217,7 @@ public class Value {
 	}
 
 	private Value disjuncted_with( Value rightOperand ) {
+
 		Type type_right = rightOperand.getType();
 		Type type_left = this.getType();
 
@@ -211,6 +230,7 @@ public class Value {
 	}
 
 	private Value isGreaterThenOrEqualTo( Value rightOperand ) {
+
 		Type type_right = rightOperand.getType();
 		Type type_left = this.getType();
 
@@ -238,10 +258,12 @@ public class Value {
 	}
 
 	private Date toDate( String text ) {
+
 		return new Date( dateStringToLong( text ) );
 	}
 
 	private Value isLowerThenOrEqualTo( Value rightOperand ) {
+
 		Type type_right = rightOperand.getType();
 		Type type_left = this.getType();
 
@@ -253,11 +275,14 @@ public class Value {
 			case "Date-Date":
 				return new Value( (toDate( text_left ).before( toDate( text_right ) )
 						|| (toDate( text_left ).equals( toDate( text_right ) ))) );
+
 			case "Integer-Integer":
 				return new Value( (Integer.parseInt( text_left ) <= Integer.parseInt( text_right )) );
+
 			case "Money-Money":
 				return new Value(
 						(new BigDecimal( text_left ).doubleValue() <= new BigDecimal( text_right ).doubleValue()) );
+
 			case "String-String":
 				return new Value( text_left.compareTo( text_right ) != 1 );
 
@@ -266,6 +291,7 @@ public class Value {
 	}
 
 	private Value compared_with( Value rightOperand ) {
+
 		Type type_right = rightOperand.getType();
 		Type type_left = this.getType();
 
@@ -282,14 +308,12 @@ public class Value {
 				return new Value( this.equals( rightOperand ) );
 
 		}
-		throw new RuntimeException( "Check Antlr grammar. Operation impossible " +
-
-				type_right + " " + type_left + " "
-
+		throw new RuntimeException( "Check Antlr grammar. Operation impossible " + type_right + " " + type_left + " "
 				+ text_left + " " + text_right + " " );
 	}
 
 	private Value isGreaterThen( Value rightOperand ) {
+
 		Type type_right = rightOperand.getType();
 		Type type_left = this.getType();
 
@@ -300,12 +324,14 @@ public class Value {
 
 			case "Date-Date":
 				return new Value( toDate( text_left ).after( toDate( text_right ) ) );
+
 			case "Integer-Integer":
 				return new Value( (Integer.parseInt( text_left ) > Integer.parseInt( text_right )) );
 
 			case "Money-Money":
 				return new Value(
 						new BigDecimal( text_left ).doubleValue() > new BigDecimal( text_right ).doubleValue() );
+
 			case "String-String":
 				return new Value( text_left.compareTo( text_right ) == 1 );
 
@@ -314,6 +340,7 @@ public class Value {
 	}
 
 	private Value isLowerThen( Value rightOperand ) {
+
 		Type type_right = rightOperand.getType();
 		Type type_left = this.getType();
 
@@ -324,11 +351,14 @@ public class Value {
 
 			case "Date-Date":
 				return new Value( toDate( text_left ).before( toDate( text_right ) ) );
+
 			case "Integer-Integer":
 				return new Value( Integer.parseInt( text_left ) < Integer.parseInt( text_right ) );
+
 			case "Money-Money":
 				return new Value(
 						new BigDecimal( text_left ).doubleValue() < new BigDecimal( text_right ).doubleValue() );
+
 			case "String-String":
 				return new Value( text_left.compareTo( text_right ) == -1 );
 
@@ -337,6 +367,7 @@ public class Value {
 	}
 
 	private long dateStringToLong( String text_left ) {
+
 		try {
 			return SIMPLE_DATE_FORMAT.parse( text_left ).getTime();
 		} catch (ParseException e) {
@@ -345,15 +376,18 @@ public class Value {
 	}
 
 	private String dateToString( Date d ) {
+
 		return SIMPLE_DATE_FORMAT.format( d );
 	}
 
 	private Value booleanAndboolean( Value left, Value right ) {
+
 		return not( booleanOrboolean( not( left ), not( right ) ) );
 	}
 
 	private Value not( Value value ) {
-		return new Value( !"True".equals( value.text ));
+
+		return new Value( !"True".equals( value.text ) );
 	}
 
 	private Value booleanOrboolean( Value left, Value right ) {
@@ -373,6 +407,7 @@ public class Value {
 
 	@Override
 	public int hashCode() {
+
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
@@ -382,6 +417,7 @@ public class Value {
 
 	@Override
 	public boolean equals( Object obj ) {
+
 		if (this == obj)
 			return true;
 		if (obj == null)

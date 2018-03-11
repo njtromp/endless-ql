@@ -1,7 +1,7 @@
 package ast.model.declarations;
 
+import ast.model.expressions.Expression;
 import ast.visitors.ASTNodeVisitor;
-import types.DataType;
 
 public class TypeDeclarationBoolean extends TypeDeclaration {
     public TypeDeclarationBoolean(String identifier, MetaInformation metaInformation) {
@@ -14,7 +14,7 @@ public class TypeDeclarationBoolean extends TypeDeclaration {
     }
 
     @Override
-    public DataType.Type toDataType() {
-        return DataType.Type.BOOLEAN;
+    public Expression.DataType toDataType() {
+        return Expression.DataType.BOOLEAN;
     }
 }

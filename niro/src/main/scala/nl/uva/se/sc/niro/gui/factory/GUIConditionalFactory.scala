@@ -1,9 +1,9 @@
 package nl.uva.se.sc.niro.gui.factory
 
 import nl.uva.se.sc.niro.gui.converter.ModelConverter
-import nl.uva.se.sc.niro.model.expressions.{ BinaryOperation, Expression }
 import nl.uva.se.sc.niro.model.gui.GUIQuestion
-import nl.uva.se.sc.niro.model.{ And, Conditional }
+import nl.uva.se.sc.niro.model.ql.expressions.{ BinaryOperation, Expression }
+import nl.uva.se.sc.niro.model.ql.{ And, Conditional }
 
 object GUIConditionalFactory {
 

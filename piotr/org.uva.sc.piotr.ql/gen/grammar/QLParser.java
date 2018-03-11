@@ -21,7 +21,7 @@ public class QLParser extends Parser {
 		OP_MULT=9, OP_DIV=10, OP_PLUS=11, OP_MINUS=12, OP_GT=13, OP_GE=14, OP_LT=15, 
 		OP_LE=16, OP_EQ=17, OP_NEQ=18, IF=19, ELSE=20, BEGIN=21, END=22, TYPE_BOOLEAN=23, 
 		TYPE_STRING=24, TYPE_INTEGER=25, TYPE_DECIMAL=26, BOOL_TRUE=27, BOOL_FALSE=28, 
-		WS=29, COMMENT=30, IDENTIFIER=31, INTEGER=32, DECIMAL=33, STRING=34, STRING_CONTENT=35;
+		WS=29, COMMENT=30, IDENTIFIER=31, INTEGER=32, STRING=33, DECIMAL=34;
 	public static final int
 		RULE_form = 0, RULE_statement = 1, RULE_question = 2, RULE_dataType = 3, 
 		RULE_ifStatement = 4, RULE_elseStatement = 5, RULE_expression = 6;
@@ -40,7 +40,7 @@ public class QLParser extends Parser {
 		"OP_MULT", "OP_DIV", "OP_PLUS", "OP_MINUS", "OP_GT", "OP_GE", "OP_LT", 
 		"OP_LE", "OP_EQ", "OP_NEQ", "IF", "ELSE", "BEGIN", "END", "TYPE_BOOLEAN", 
 		"TYPE_STRING", "TYPE_INTEGER", "TYPE_DECIMAL", "BOOL_TRUE", "BOOL_FALSE", 
-		"WS", "COMMENT", "IDENTIFIER", "INTEGER", "DECIMAL", "STRING", "STRING_CONTENT"
+		"WS", "COMMENT", "IDENTIFIER", "INTEGER", "STRING", "DECIMAL"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -229,6 +229,7 @@ public class QLParser extends Parser {
 		public Token label;
 		public Token variableName;
 		public DataTypeContext variableType;
+		public ExpressionContext assignment;
 		public TerminalNode STRING() { return getToken(QLParser.STRING, 0); }
 		public TerminalNode IDENTIFIER() { return getToken(QLParser.IDENTIFIER, 0); }
 		public DataTypeContext dataType() {
@@ -280,7 +281,7 @@ public class QLParser extends Parser {
 				setState(33);
 				match(OP_ASSIG);
 				setState(34);
-				expression(0);
+				((QuestionContext)_localctx).assignment = expression(0);
 				}
 			}
 
@@ -604,6 +605,7 @@ public class QLParser extends Parser {
 		}
 	}
 	public static class ExpressionParenthesisesContext extends ExpressionContext {
+		public ExpressionContext subExpression;
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
@@ -749,6 +751,7 @@ public class QLParser extends Parser {
 		}
 	}
 	public static class ExpressionNegationContext extends ExpressionContext {
+		public ExpressionContext subExpression;
 		public TerminalNode OP_NOT() { return getToken(QLParser.OP_NOT, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
@@ -917,6 +920,7 @@ public class QLParser extends Parser {
 		}
 	}
 	public static class ExpressionArithmeticMinusContext extends ExpressionContext {
+		public ExpressionContext subExpression;
 		public TerminalNode OP_MINUS() { return getToken(QLParser.OP_MINUS, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
@@ -1043,7 +1047,7 @@ public class QLParser extends Parser {
 				setState(69);
 				match(T__2);
 				setState(70);
-				expression(0);
+				((ExpressionParenthesisesContext)_localctx).subExpression = expression(0);
 				setState(71);
 				match(T__3);
 				}
@@ -1056,7 +1060,7 @@ public class QLParser extends Parser {
 				setState(73);
 				match(OP_NOT);
 				setState(74);
-				expression(16);
+				((ExpressionNegationContext)_localctx).subExpression = expression(16);
 				}
 				break;
 			case OP_MINUS:
@@ -1067,7 +1071,7 @@ public class QLParser extends Parser {
 				setState(75);
 				match(OP_MINUS);
 				setState(76);
-				expression(15);
+				((ExpressionArithmeticMinusContext)_localctx).subExpression = expression(15);
 				}
 				break;
 			case IDENTIFIER:
@@ -1082,8 +1086,8 @@ public class QLParser extends Parser {
 			case BOOL_TRUE:
 			case BOOL_FALSE:
 			case INTEGER:
-			case DECIMAL:
 			case STRING:
+			case DECIMAL:
 				{
 				_localctx = new ExpressionSingleValueContext(_localctx);
 				_ctx = _localctx;
@@ -1091,7 +1095,7 @@ public class QLParser extends Parser {
 				setState(78);
 				((ExpressionSingleValueContext)_localctx).value = _input.LT(1);
 				_la = _input.LA(1);
-				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << BOOL_TRUE) | (1L << BOOL_FALSE) | (1L << INTEGER) | (1L << DECIMAL) | (1L << STRING))) != 0)) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << BOOL_TRUE) | (1L << BOOL_FALSE) | (1L << INTEGER) | (1L << STRING) | (1L << DECIMAL))) != 0)) ) {
 					((ExpressionSingleValueContext)_localctx).value = (Token)_errHandler.recoverInline(this);
 				}
 				else {
@@ -1330,7 +1334,7 @@ public class QLParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3%}\4\2\t\2\4\3\t\3"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3$}\4\2\t\2\4\3\t\3"+
 		"\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\3\2\3\2\3\2\3\2\7\2\25\n\2\f"+
 		"\2\16\2\30\13\2\3\2\3\2\3\3\3\3\5\3\36\n\3\3\4\3\4\3\4\3\4\3\4\3\4\5\4"+
 		"&\n\4\3\5\3\5\3\5\3\5\5\5,\n\5\3\6\3\6\3\6\3\6\3\6\3\6\7\6\64\n\6\f\6"+
@@ -1343,7 +1347,7 @@ public class QLParser extends Parser {
 		"\2\16Q\3\2\2\2\20\21\7\3\2\2\21\22\7!\2\2\22\26\7\27\2\2\23\25\5\4\3\2"+
 		"\24\23\3\2\2\2\25\30\3\2\2\2\26\24\3\2\2\2\26\27\3\2\2\2\27\31\3\2\2\2"+
 		"\30\26\3\2\2\2\31\32\7\30\2\2\32\3\3\2\2\2\33\36\5\6\4\2\34\36\5\n\6\2"+
-		"\35\33\3\2\2\2\35\34\3\2\2\2\36\5\3\2\2\2\37 \7$\2\2 !\7!\2\2!\"\7\4\2"+
+		"\35\33\3\2\2\2\35\34\3\2\2\2\36\5\3\2\2\2\37 \7#\2\2 !\7!\2\2!\"\7\4\2"+
 		"\2\"%\5\b\5\2#$\7\n\2\2$&\5\16\b\2%#\3\2\2\2%&\3\2\2\2&\7\3\2\2\2\',\7"+
 		"\31\2\2(,\7\32\2\2),\7\33\2\2*,\7\34\2\2+\'\3\2\2\2+(\3\2\2\2+)\3\2\2"+
 		"\2+*\3\2\2\2,\t\3\2\2\2-.\7\25\2\2./\7\5\2\2/\60\5\16\b\2\60\61\7\6\2"+

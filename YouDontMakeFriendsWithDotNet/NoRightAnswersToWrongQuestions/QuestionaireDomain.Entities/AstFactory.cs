@@ -52,41 +52,41 @@ namespace QuestionaireDomain.Entities
 
             return DomainItemRegistration<IConditionalStatementNode>(condition);
         }
-        
+
         public Reference<IUserInputQuestionNode> CreateUserInputQuestion(
             string definition,
-            string questionName, 
-            string questionText, 
+            string questionName,
+            string questionText,
             Type questionType)
         {
             var question = new UserInputQuestionNode(
-                m_ids.Next, 
+                m_ids.Next,
                 definition,
-                questionName, 
-                questionText, 
+                questionName,
+                questionText,
                 questionType);
 
             return DomainItemRegistration<IUserInputQuestionNode>(question);
         }
 
         public Reference<ICalculatedQuestionNode> CreateCalculatedQuestion(
-            string definition,
+            string definition, 
             string questionName, 
             string questionText, 
             Type questionType,
             Reference<ICalculationNode> calculation)
         {
             var question = new CalculatedQuestionNode(
-                m_ids.Next, 
+                m_ids.Next,
                 definition,
-                questionName, 
-                questionText, 
+                questionName,
+                questionText,
                 questionType,
                 calculation);
 
             return DomainItemRegistration<ICalculatedQuestionNode>(question);
         }
-        
+
         public Reference<INumberNode> CreateNumber(string numberText)
         {
             var number = new NumberNode(m_ids.Next, numberText);

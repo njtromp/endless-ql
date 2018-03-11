@@ -24,6 +24,11 @@ public class MoneyType extends Type {
 		this.val = val;
 	}
 	
+    @Override
+    public String getTypeString() {
+      return "MoneyType";
+    }
+	
 	@Override
 	public <T, U> T accept(TypeVisitor<T, U> visitor, U ctx) {
 		return visitor.visit(this, ctx);

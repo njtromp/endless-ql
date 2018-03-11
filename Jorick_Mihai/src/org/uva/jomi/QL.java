@@ -11,13 +11,11 @@ import org.uva.jomi.ql.ast.analysis.DuplicatedLabelChecker;
 import org.uva.jomi.ql.ast.analysis.IdentifierResolver;
 import org.uva.jomi.ql.ast.analysis.TypeResolver;
 import org.uva.jomi.ql.ast.statements.Stmt;
-import org.uva.jomi.ql.ast.*;
 import org.uva.jomi.ql.parser.antlr.*;
 import org.uva.jomi.ql.parser.antlr.QLParser.ParseContext;
 import org.uva.jomi.ui.elements.ElementBuilder;
 import org.uva.jomi.ui.elements.core.Frame;
 import org.uva.jomi.ui.elements.core.Panel;
-import org.uva.jomi.ui.elements.core.ScrollPanel;
 
 public class QL {
 

@@ -3,9 +3,9 @@ package nl.uva.se.sc.niro
 import java.time.LocalDate
 
 import nl.uva.se.sc.niro.Evaluator.evaluateExpression
-import nl.uva.se.sc.niro.model.{ Div, Mul, Sub, _ }
-import nl.uva.se.sc.niro.model.expressions.answers._
-import nl.uva.se.sc.niro.model.expressions.{ BinaryOperation, Reference }
+import nl.uva.se.sc.niro.model.ql._
+import nl.uva.se.sc.niro.model.ql.expressions.answers._
+import nl.uva.se.sc.niro.model.ql.expressions.{ BinaryOperation, Reference }
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.{ Matchers, WordSpec }
 
@@ -17,10 +17,10 @@ class ExpressionEvaluatorTest extends WordSpec with Matchers with TableDrivenPro
         // TODO deal with div by zero error
         val table = Table(
           ("Operator", "Left", "Right", "Expected Answer"),
-          (Add, IntAnswer(5), IntAnswer(3), IntAnswer(8)),
-          (Sub, IntAnswer(5), IntAnswer(3), IntAnswer(2)),
-          (Mul, IntAnswer(5), IntAnswer(3), IntAnswer(15)),
-          (Div, IntAnswer(10), IntAnswer(5), IntAnswer(2))
+          (Add, IntegerAnswer(5), IntegerAnswer(3), IntegerAnswer(8)),
+          (Sub, IntegerAnswer(5), IntegerAnswer(3), IntegerAnswer(2)),
+          (Mul, IntegerAnswer(5), IntegerAnswer(3), IntegerAnswer(15)),
+          (Div, IntegerAnswer(10), IntegerAnswer(5), IntegerAnswer(2))
         )
 
         forAll(table) { (operator, left, right, expectedAnswer) =>
@@ -33,10 +33,10 @@ class ExpressionEvaluatorTest extends WordSpec with Matchers with TableDrivenPro
         // TODO deal with div by zero error
         val table = Table(
           ("Operator", "Left", "Right", "Expected Answer"),
-          (Add, DecAnswer(5), DecAnswer(3), DecAnswer(8)),
-          (Sub, DecAnswer(5), DecAnswer(3), DecAnswer(2)),
-          (Mul, DecAnswer(5), DecAnswer(3), DecAnswer(15)),
-          (Div, DecAnswer(10), DecAnswer(5), DecAnswer(2))
+          (Add, DecimalAnswer(5), DecimalAnswer(3), DecimalAnswer(8)),
+          (Sub, DecimalAnswer(5), DecimalAnswer(3), DecimalAnswer(2)),
+          (Mul, DecimalAnswer(5), DecimalAnswer(3), DecimalAnswer(15)),
+          (Div, DecimalAnswer(10), DecimalAnswer(5), DecimalAnswer(2))
         )
 
         forAll(table) { (operator, left, right, expectedAnswer) =>
@@ -75,20 +75,20 @@ class ExpressionEvaluatorTest extends WordSpec with Matchers with TableDrivenPro
       "on integers" in {
         val table = Table(
           ("Operator", "Left", "Right", "Expected Answer"),
-          (Lt, IntAnswer(1), IntAnswer(2), BooleanAnswer(true)),
-          (Lt, IntAnswer(2), IntAnswer(1), BooleanAnswer(false)),
-          (Lte, IntAnswer(1), IntAnswer(2), BooleanAnswer(true)),
-          (Lte, IntAnswer(1), IntAnswer(1), BooleanAnswer(true)),
-          (Lte, IntAnswer(2), IntAnswer(1), BooleanAnswer(false)),
-          (Gte, IntAnswer(5), IntAnswer(3), BooleanAnswer(true)),
-          (Gte, IntAnswer(5), IntAnswer(5), BooleanAnswer(true)),
-          (Gte, IntAnswer(3), IntAnswer(5), BooleanAnswer(false)),
-          (Gt, IntAnswer(5), IntAnswer(3), BooleanAnswer(true)),
-          (Gt, IntAnswer(3), IntAnswer(5), BooleanAnswer(false)),
-          (Ne, IntAnswer(5), IntAnswer(3), BooleanAnswer(true)),
-          (Ne, IntAnswer(5), IntAnswer(5), BooleanAnswer(false)),
-          (Eq, IntAnswer(5), IntAnswer(5), BooleanAnswer(true)),
-          (Eq, IntAnswer(5), IntAnswer(3), BooleanAnswer(false))
+          (Lt, IntegerAnswer(1), IntegerAnswer(2), BooleanAnswer(true)),
+          (Lt, IntegerAnswer(2), IntegerAnswer(1), BooleanAnswer(false)),
+          (Lte, IntegerAnswer(1), IntegerAnswer(2), BooleanAnswer(true)),
+          (Lte, IntegerAnswer(1), IntegerAnswer(1), BooleanAnswer(true)),
+          (Lte, IntegerAnswer(2), IntegerAnswer(1), BooleanAnswer(false)),
+          (Gte, IntegerAnswer(5), IntegerAnswer(3), BooleanAnswer(true)),
+          (Gte, IntegerAnswer(5), IntegerAnswer(5), BooleanAnswer(true)),
+          (Gte, IntegerAnswer(3), IntegerAnswer(5), BooleanAnswer(false)),
+          (Gt, IntegerAnswer(5), IntegerAnswer(3), BooleanAnswer(true)),
+          (Gt, IntegerAnswer(3), IntegerAnswer(5), BooleanAnswer(false)),
+          (Ne, IntegerAnswer(5), IntegerAnswer(3), BooleanAnswer(true)),
+          (Ne, IntegerAnswer(5), IntegerAnswer(5), BooleanAnswer(false)),
+          (Eq, IntegerAnswer(5), IntegerAnswer(5), BooleanAnswer(true)),
+          (Eq, IntegerAnswer(5), IntegerAnswer(3), BooleanAnswer(false))
         )
 
         forAll(table) { (operator, left, right, expectedAnswer) =>
@@ -170,7 +170,7 @@ class ExpressionEvaluatorTest extends WordSpec with Matchers with TableDrivenPro
     "do nested operations" in {
       val table = Table(
         ("Operator", "Left", "Right", "Expected Answer"),
-        (Mul, IntAnswer(5), BinaryOperation(Mul, IntAnswer(10), IntAnswer(15)), IntAnswer(750)),
+        (Mul, IntegerAnswer(5), BinaryOperation(Mul, IntegerAnswer(10), IntegerAnswer(15)), IntegerAnswer(750)),
         (And, BooleanAnswer(true), BinaryOperation(And, BooleanAnswer(true), BooleanAnswer(true)), BooleanAnswer(true)),
         (And, BooleanAnswer(true), BinaryOperation(Eq, StringAnswer("Foo"), StringAnswer("Foo")), BooleanAnswer(true))
       )
@@ -185,8 +185,8 @@ class ExpressionEvaluatorTest extends WordSpec with Matchers with TableDrivenPro
       val qlForm = QLForm(
         formName = "Revenue",
         statements = List(
-          Question("revenue", "How much did you earn", IntegerType, IntAnswer(1000)),
-          Question("expenses", "How much did you spend", IntegerType, IntAnswer(200)),
+          Question("revenue", "How much did you earn", IntegerType, IntegerAnswer(1000)),
+          Question("expenses", "How much did you spend", IntegerType, IntegerAnswer(200)),
           Question(
             "profit",
             "You still have",
@@ -197,7 +197,7 @@ class ExpressionEvaluatorTest extends WordSpec with Matchers with TableDrivenPro
 
       val q: Seq[Question] = qlForm.statements.collect { case q: Question => q }
       val x = q.map(q => evaluateExpression(q.expression, qlForm.symbolTable, Map.empty))
-      assert(x == Seq(IntAnswer(1000), IntAnswer(200), IntAnswer(800)))
+      assert(x == Seq(IntegerAnswer(1000), IntegerAnswer(200), IntegerAnswer(800)))
     }
 
     "do error handling" should {
@@ -212,7 +212,7 @@ class ExpressionEvaluatorTest extends WordSpec with Matchers with TableDrivenPro
         assertThrows[UnsupportedOperationException](evaluateExpression(expression, Map.empty, Map.empty))
       }
       "throw an error when evaluating mixed answertypes" in {
-        val expression = BinaryOperation(Eq, BooleanAnswer(true), IntAnswer(5))
+        val expression = BinaryOperation(Eq, BooleanAnswer(true), IntegerAnswer(5))
 
         assertThrows[IllegalArgumentException](evaluateExpression(expression, Map.empty, Map.empty))
       }

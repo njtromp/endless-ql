@@ -5,7 +5,11 @@ import org.uva.qls.ast.Widget.Widget;
 
 public class DefaultWidgetStatement extends DefaultStatement {
 
-    public DefaultWidgetStatement(Type type, Widget widget){
+    private Type type;
+    private Widget widget;
 
+    public DefaultWidgetStatement(Type type, Widget widget){
+        this.type = type;
+        this.widget = widget;
     }
 }

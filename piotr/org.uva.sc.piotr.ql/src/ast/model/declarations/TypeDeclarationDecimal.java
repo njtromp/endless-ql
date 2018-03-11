@@ -1,7 +1,7 @@
 package ast.model.declarations;
 
+import ast.model.expressions.Expression;
 import ast.visitors.ASTNodeVisitor;
-import types.DataType;
 
 public class TypeDeclarationDecimal extends TypeDeclaration {
     public TypeDeclarationDecimal(String identifier, MetaInformation metaInformation) {
@@ -14,7 +14,7 @@ public class TypeDeclarationDecimal extends TypeDeclaration {
     }
 
     @Override
-    public DataType.Type toDataType() {
-        return DataType.Type.DECIMAL;
+    public Expression.DataType toDataType() {
+        return Expression.DataType.DECIMAL;
     }
 }

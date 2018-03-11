@@ -2,6 +2,7 @@ package nl.uva.js.qlparser.ui;
 
 import nl.uva.js.qlparser.logic.FormBuilder;
 import nl.uva.js.qlparser.models.expressions.Form;
+import nl.uva.js.qlparser.ui.components.gui.TextPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,19 +31,19 @@ public class GUIBuilder {
     private static final int FULL_WIDTH  = FORM_WIDTH + INPUT_WIDTH;
 
     private static Frame mainFrame;
-    private static JPanel inputPanel;
+    private static TextPanel inputPanel;
     private static JPanel formPanel;
     private static JPanel bottomPanel;
-    private static JPanel console;
-    private static JPanel contentPanel;
+    private static TextPanel console;
+    private static JPanel formContent;
 
     public static Frame getGUI(Form form) {
         mainFrame   = getMainFrame();
-        inputPanel  = getTextPanel(INPUT_WIDTH, FORM_VIEW_HEIGHT, Color.darkGray);
         formPanel   = getFormPanel(form);
         bottomPanel = getBottomPanel();
 
-        setInput(loadDefaultFileContent());
+        inputPanel  = new TextPanel(INPUT_WIDTH, FORM_VIEW_HEIGHT, Color.darkGray);
+        inputPanel.setText(loadDefaultFileContent());
 
         mainFrame.add(inputPanel, BorderLayout.LINE_START);
         mainFrame.add(formPanel, BorderLayout.CENTER);
@@ -61,11 +62,6 @@ public class GUIBuilder {
         return mainFrame;
     }
 
-    private static void setInput(String ql) {
-        TextArea input = ((TextArea) inputPanel.getComponent(0));
-        input.setText(ql);
-    }
-
     private static String loadDefaultFileContent() {
         try {
             String file = GUIBuilder.class.getClassLoader().getResource(System.getProperty("ql.file")).getFile();
@@ -77,11 +73,9 @@ public class GUIBuilder {
     }
 
     private static void log(String message) {
-        System.out.println("HAI");
-        TextArea log = ((TextArea) console.getComponent(0));
-        log.setText(log.getText() + "\n" + message);
-        log.revalidate();
-        log.repaint();
+        console.setText(console.getText() + "\n" + message);
+        console.revalidate();
+        console.repaint();
     }
 
     private static Frame getMainFrame() {
@@ -95,17 +89,17 @@ public class GUIBuilder {
     }
 
     private static JPanel getFormPanel(Form form) {
-        contentPanel = new JPanel();
-        JScrollPane scrollPane = new JScrollPane(contentPanel);
+        formContent = new JPanel();
+        JScrollPane scrollPane = new JScrollPane(formContent);
         JPanel formPanel       = new JPanel(null);
 
         int panelHeight        = FORM_VIEW_HEIGHT - 5;
 
-        contentPanel.setPreferredSize(new Dimension(FORM_WIDTH, FORM_HEIGHT));
-        contentPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        formContent.setPreferredSize(new Dimension(FORM_WIDTH, FORM_HEIGHT));
+        formContent.setLayout(new FlowLayout(FlowLayout.CENTER));
 
         List<Component> components = form.getComponents();
-        components.forEach(contentPanel::add);
+        components.forEach(formContent::add);
 
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -122,7 +116,7 @@ public class GUIBuilder {
         JPanel bottomPanel = new JPanel();
 
         JPanel menuButtons = getMenuButtons();
-        console = getTextPanel(FULL_WIDTH, LOG_HEIGHT, Color.black);
+        console = new TextPanel(FULL_WIDTH, LOG_HEIGHT, Color.black);
 
         bottomPanel.setLayout(new BorderLayout());
         bottomPanel.add(menuButtons, BorderLayout.PAGE_START);
@@ -177,21 +171,15 @@ public class GUIBuilder {
     }
 
     private static void reloadForm() {
-        contentPanel.removeAll();
+        formContent.removeAll();
 
-        Form newForm = FormBuilder.parseFormFromString(getInput());
+        Form newForm = FormBuilder.parseFormFromString(inputPanel.getText());
 
         List<Component> components = newForm.getComponents();
-        components.forEach(contentPanel::add);
+        components.forEach(formContent::add);
 
-        contentPanel.revalidate();
-        contentPanel.repaint();
-    }
-
-    private static String getInput() {
-        TextArea input = ((TextArea) inputPanel.getComponent(0));
-        return input.getText();
-
+        formContent.revalidate();
+        formContent.repaint();
     }
 
     private static JButton getButton(String text, int width) {
@@ -205,21 +193,5 @@ public class GUIBuilder {
         panel.setPreferredSize(new Dimension(i, BUTTON_HEIGHT));
         panel.setBackground(Color.gray);
         return panel;
-    }
-
-    private static JPanel getTextPanel(int width, int height, Color color) {
-        JPanel textPanel = new JPanel();
-        textPanel.setBackground(Color.gray);
-
-        TextArea textArea = new TextArea("",0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
-        textArea.setPreferredSize(new Dimension(width, height));
-        textArea.setBackground(color);
-        textArea.setForeground(Color.white);
-        textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
-
-        textPanel.add(textArea);
-        textPanel.setVisible(true);
-
-        return textPanel;
     }
 }

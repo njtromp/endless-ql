@@ -10,21 +10,21 @@ import javafx.stage.{ FileChooser, Stage }
 import nl.uva.se.sc.niro.QLFormService
 import nl.uva.se.sc.niro.errors.Errors
 import nl.uva.se.sc.niro.gui.application.QLForms
-import nl.uva.se.sc.niro.model.QLForm
+import nl.uva.se.sc.niro.model.ql.QLForm
 
 class QLHomeController extends QLBaseController {
   @FXML
-  private var errorMessages: TextArea = _
+  var errorMessages: TextArea = _
 
   @FXML
   def openForm(event: ActionEvent): Unit = {
-    val fileChooser = new FileChooser
-    fileChooser.setTitle("Select QL form")
-    fileChooser.getExtensionFilters.add(new FileChooser.ExtensionFilter("QL Form files", "*.ql"))
     val stage = getActiveStage(event)
-    val selectedFile: File = fileChooser.showOpenDialog(stage)
+    val selectedFile: File = selectQLFile(stage)
     if (selectedFile != null) try {
       val formOrErrors: Either[Seq[Errors.Error], QLForm] = QLFormService.importQLSpecification(selectedFile)
+      val qlsFile = new File(selectedFile.toString + "s")
+      pprint.pprintln(qlsFile.toString)
+      pprint.pprintln(qlsFile.exists().toString)
       formOrErrors match {
         case Right(form)  => handleSuccess(stage, form)
         case Left(errors) => handleErrors(errors)
@@ -32,6 +32,13 @@ class QLHomeController extends QLBaseController {
     } catch {
       case e: IOException => e.printStackTrace()
     }
+  }
+
+  private def selectQLFile(stage: Stage): File = {
+    val fileChooser = new FileChooser
+    fileChooser.setTitle("Select QL form")
+    fileChooser.getExtensionFilters.add(new FileChooser.ExtensionFilter("QL Form files", "*.ql"))
+    fileChooser.showOpenDialog(stage)
   }
 
   private def handleSuccess(stage: Stage, form: QLForm) = {

@@ -60,6 +60,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Visitors\BooleanLogicPrinter.cs" />
     <Compile Include="Visitors\IBooleanLogicPrinter.cs" />
+    <Compile Include="Visitors\IPrinter.cs" />
     <Compile Include="Visitors\IQuestionnairePrinter.cs" />
     <Compile Include="Visitors\QuestionnairePrinter.cs" />
   </ItemGroup>

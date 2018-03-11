@@ -1,17 +1,10 @@
 package gui;
 
-import ast.model.Form;
-import ast.model.statements.Question;
-import ast.model.statements.Statement;
-import gui.model.FormBlock;
+import gui.model.FormFieldModel;
 import gui.view.TextForm;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 // http://www.java2s.com/Code/Java/Swing-JFC/Asimplelabelforfieldformpanel.htm
@@ -19,9 +12,9 @@ import java.util.List;
 // https://www.callicoder.com/javafx-registration-form-gui-tutorial/
 
 public class QLGui {
-    public QLGui(List<FormBlock> formBlocks) {
+    public QLGui(List<FormFieldModel> formFieldModels) {
 
-        final TextForm form = new TextForm(formBlocks);
+        final TextForm form = new TextForm(formFieldModels);
 
         JButton submit = new JButton("Submit Form");
 

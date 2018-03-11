@@ -21,7 +21,6 @@ import ast.model.statements.Statement;
 import grammar.QLBaseVisitor;
 import grammar.QLParser;
 import org.antlr.v4.runtime.ParserRuleContext;
-import types.DataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,8 +96,8 @@ public class ASTBuilder extends QLBaseVisitor<ASTNode> {
                 this.ExtractMetaInformationFromContext(ctx)
         );
 
-        if (ctx.expression() != null) {
-            question.setAssignedExpression((Expression) visit(ctx.expression()));
+        if (ctx.assignment != null) {
+            question.setAssignedExpression((Expression) visit(ctx.assignment));
         }
 
         question.setMetaInformation(this.ExtractMetaInformationFromContext(ctx));
@@ -145,16 +144,16 @@ public class ASTBuilder extends QLBaseVisitor<ASTNode> {
     @Override
     public Literal visitExpressionSingleValue(QLParser.ExpressionSingleValueContext ctx) {
 
-        DataType.Type type = DataType.Type.STRING;
+        Expression.DataType type = Expression.DataType.STRING;
 
         if (ctx.BOOL_FALSE() != null || ctx.BOOL_TRUE() != null)
-            type = DataType.Type.BOOLEAN;
+            type = Expression.DataType.BOOLEAN;
 
         if (ctx.DECIMAL() != null)
-            type = DataType.Type.DECIMAL;
+            type = Expression.DataType.DECIMAL;
 
         if (ctx.INTEGER() != null)
-            type = DataType.Type.INTEGER;
+            type = Expression.DataType.INTEGER;
 
         return new Literal(
                 ctx.value.getText().substring(1, ctx.value.getText().length() - 1),
@@ -164,6 +163,11 @@ public class ASTBuilder extends QLBaseVisitor<ASTNode> {
     }
 
     // References
+
+    @Override
+    public ASTNode visitExpressionParenthesises(QLParser.ExpressionParenthesisesContext ctx) {
+        return visit(ctx.subExpression);
+    }
 
     @Override
     public VariableReference visitExpressionVariableReference(QLParser.ExpressionVariableReferenceContext ctx) {
@@ -176,7 +180,7 @@ public class ASTBuilder extends QLBaseVisitor<ASTNode> {
     @Override
     public Negation visitExpressionNegation(QLParser.ExpressionNegationContext ctx) {
         return new Negation(
-                (Expression) visit(ctx.expression()),
+                (Expression) visit(ctx.subExpression),
                 this.ExtractMetaInformationFromContext(ctx)
         );
     }
@@ -186,7 +190,7 @@ public class ASTBuilder extends QLBaseVisitor<ASTNode> {
     @Override
     public Minus visitExpressionArithmeticMinus(QLParser.ExpressionArithmeticMinusContext ctx) {
         return new Minus(
-                (Expression) visit(ctx.expression()),
+                (Expression) visit(ctx.subExpression),
                 this.ExtractMetaInformationFromContext(ctx)
         );
     }

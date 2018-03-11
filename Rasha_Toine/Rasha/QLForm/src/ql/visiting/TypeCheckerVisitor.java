@@ -64,13 +64,13 @@ public class TypeCheckerVisitor
 		if (isUndefinedType(currentType)) {
 			return;
 		}
-		if (!currentType.equals(expectedType)) {
+		if (currentType.getTypeString() != expectedType.getTypeString()) {
 			  System.out.println("Error: Type mismatch in " + expr + "between: " + currentType + "and, " + expectedType);
 		}
 	}
 	
 	private boolean isUndefinedType(Type type) {
-		return type.equals(new UndefinedType());
+		return type.getTypeString() == (new UndefinedType()).getTypeString();
 	}
 
 	/* Block */
@@ -228,7 +228,7 @@ public class TypeCheckerVisitor
 		Type leftType = node.getLeft().accept(this, ctx);
 		Type rightType = node.getRight().accept(this, ctx);
 		if (!isUndefinedType(leftType) && !isUndefinedType(rightType)) {
-		  if (!leftType.equals(rightType)) {
+		  if (leftType.getTypeString() != rightType.getTypeString()) {
 			  System.out.println("Error: Invalid operand for Eq: " + leftType + ", " + rightType);
 		  }
 		}
@@ -240,7 +240,7 @@ public class TypeCheckerVisitor
 		Type leftType = node.getLeft().accept(this, ctx);
 		Type rightType = node.getRight().accept(this, ctx);
 		if (!isUndefinedType(leftType) && !isUndefinedType(rightType)) {
-		  if (!leftType.equals(rightType)) {
+		  if (leftType.getTypeString() != rightType.getTypeString()) {
 			  System.out.println("Error: Invalid operand for NEq: " + leftType + ", " + rightType);
 		  }
 		}

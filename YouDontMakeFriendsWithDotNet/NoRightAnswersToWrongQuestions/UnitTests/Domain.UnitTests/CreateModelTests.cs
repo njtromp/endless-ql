@@ -7,6 +7,7 @@ using QuestionaireDomain.Entities;
 using QuestionaireDomain.Entities.API;
 using QuestionaireDomain.Entities.API.AstNodes.Questionnaire;
 using QuestionaireDomain.Entities.API.Output;
+using QuestionaireDomain.Entities.DomainObjects;
 using QuestionnaireDomain.Logic;
 using QuestionnaireDomain.Logic.API;
 using QuestionnaireInfrastructure;
@@ -45,11 +46,12 @@ namespace UnitTests.Domain.UnitTests
         [TestCaseSource(
             typeof(TestModelCreationData),
             nameof(TestModelCreationData.SimpleQuestionnaireCases))]
-        public void WhenGivenBadlyFormedComments_ThrowsException(
+        public void GivenAValidForm_CreatesAQuestionnaireOutputWithSameName(
             string validDescription,
             string expectedQuestionnaireName)
         {
             CreateForm(validDescription);
+
             var actualDisplayName = m_domainItemLocator
                 .GetAll<IQuestionnaireOutputItem>()
                 .FirstOrDefault()
@@ -59,7 +61,42 @@ namespace UnitTests.Domain.UnitTests
                 expected: expectedQuestionnaireName,
                 actual: actualDisplayName);
         }
-        
+
+        [TestCaseSource(
+            typeof(TestModelCreationData),
+            nameof(TestModelCreationData.QuestionTypes))]
+        public void GivenAValidType_ReturnsQuestionOfCorrectType(
+           string validDefinition,
+           Type questionType) 
+        {
+            CreateForm(validDefinition);
+            var domainItem = m_domainItemLocator
+                .GetAll<IQuestionOutputItem>()
+                .FirstOrDefault();
+            Assert.NotNull(domainItem);
+            Assert.AreEqual(
+                expected: questionType, 
+                actual: domainItem.QuestionType);
+        }
+
+
+        //[TestCaseSource(
+        //    typeof(TestModelCreationData),
+        //    nameof(TestModelCreationData.DefaultQuestionValues))]
+        //public void GivenAnUninitiatedValue_ReturnsDefaultValue(
+        //    string validDefinition,
+        //    string questionValue)
+        //{
+        //    CreateForm(validDefinition);
+        //    var outputItem = m_domainItemLocator
+        //        .GetAll<IQuestionOutputItem>()
+        //        .FirstOrDefault();
+        //    Assert.NotNull(outputItem);
+        //    Assert.AreEqual(
+        //        expected: questionValue,
+        //        actual: outputItem.Value);
+        //}
+
         private void CreateForm(string validText)
         {
             var questionnaireCreator = m_serviceProvider
@@ -72,9 +109,10 @@ namespace UnitTests.Domain.UnitTests
 
             foreach (var questionnaireRootNode in questionnaireNodes)
             {
-                if (m_modelCreator.Validate(questionnaireRootNode))
+                var questionnaireRef = new Reference<IQuestionnaireRootNode>(questionnaireRootNode.Id);
+                if (m_modelCreator.Validate(questionnaireRef))
                 {
-                    m_modelCreator.Create(questionnaireRootNode);
+                    m_modelCreator.Create(questionnaireRef);
                 }
             }
         }

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import nl.uva.js.qlparser.models.expressions.data.Variable;
-import nl.uva.js.qlparser.ui.ComponentBuilder;
+import nl.uva.js.qlparser.ui.components.form.ComponentBuilder;
 import wrappers.DoubleWrapper;
 import wrappers.IntegerWrapper;
 

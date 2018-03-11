@@ -167,7 +167,7 @@ public class InterpretingVisitor extends ExpressionLanguageBaseVisitor<Value> {
 
 		String identifier = ctx.Identifier().getText();
 		String label = removeQuotes( ctx.QuotedString().getText() );
-		;
+		
 		Type type = Type.parseType( ctx.Type().getText() );
 
 		forwardReferences.remove( identifier );
@@ -195,6 +195,7 @@ public class InterpretingVisitor extends ExpressionLanguageBaseVisitor<Value> {
 	public Value visitPartConditionalBlock( ExpressionLanguageParser.PartConditionalBlockContext ctx ) {
 
 		Value value = visit( ctx.expression() );
+		
 		if (value.equals( new Value( Type.Boolean, "True" ) )) {
 			visitChildren( ctx.block() );
 		}

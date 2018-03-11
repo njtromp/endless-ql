@@ -2,9 +2,10 @@ package nl.uva.se.sc.niro.parser
 
 import java.io.IOException
 
-import nl.uva.se.sc.niro.model.expressions.answers.{ BooleanAnswer, DecAnswer, IntAnswer, StringAnswer }
-import nl.uva.se.sc.niro.model.expressions.{ BinaryOperation, Reference, UnaryOperation }
+import nl.uva.se.sc.niro.model.ql.expressions.answers.{ BooleanAnswer, DecimalAnswer, IntegerAnswer, StringAnswer }
+import nl.uva.se.sc.niro.model.ql.expressions.{ BinaryOperation, Reference, UnaryOperation }
 import nl.uva.se.sc.niro.model._
+import nl.uva.se.sc.niro.model.ql._
 import org.antlr.v4.runtime.{ CharStream, CharStreams }
 import org.scalatest.FunSuite
 
@@ -155,7 +156,7 @@ class QLFormParserTest extends FunSuite {
           predicate = BinaryOperation(
             And,
             BinaryOperation(Ne, Reference("lastName"), Reference("firstName")),
-            BinaryOperation(Gt, Reference("a"), UnaryOperation(Min, IntAnswer(Some(10))))),
+            BinaryOperation(Gt, Reference("a"), UnaryOperation(Sub, IntegerAnswer(Some(10))))),
           thenStatements = List(
             Question(id = "lastName", label = "What is your last name?", StringType, expression = StringAnswer(None))
           )
@@ -178,7 +179,7 @@ class QLFormParserTest extends FunSuite {
           predicate = BinaryOperation(
             And,
             BinaryOperation(Ne, Reference("lastName"), Reference("firstName")),
-            BinaryOperation(Gt, Reference("a"), UnaryOperation(Min, IntAnswer(Some(10))))),
+            BinaryOperation(Gt, Reference("a"), UnaryOperation(Sub, IntegerAnswer(Some(10))))),
           thenStatements = List(
             Question("lastName", "What is your last name?", StringType, StringAnswer(None)),
             Question("lastName", "What is your last name?", StringType, StringAnswer(None))
@@ -190,7 +191,7 @@ class QLFormParserTest extends FunSuite {
             BinaryOperation(
               And,
               BinaryOperation(Ne, Reference("lastName"), Reference("firstName")),
-              BinaryOperation(Gt, Reference("a"), UnaryOperation(Min, IntAnswer(Some(10)))))
+              BinaryOperation(Gt, Reference("a"), UnaryOperation(Sub, IntegerAnswer(Some(10)))))
           ),
           thenStatements = List(
             Question("middleName", "Do you have a middle name?", BooleanType, BooleanAnswer(None)),
@@ -218,10 +219,14 @@ class QLFormParserTest extends FunSuite {
             binaryOperator = Add,
             left = BinaryOperation(
               binaryOperator = Mul,
-              left =
-                BinaryOperation(binaryOperator = Sub, left = IntAnswer(Some(10000)), right = Reference("hasSoldHouse")),
-              right = IntAnswer(Some(42))),
-            right = BinaryOperation(binaryOperator = Div, left = IntAnswer(Some(23)), right = IntAnswer(Some(54)))
+              left = BinaryOperation(
+                binaryOperator = Sub,
+                left = IntegerAnswer(Some(10000)),
+                right = Reference("hasSoldHouse")),
+              right = IntegerAnswer(Some(42))
+            ),
+            right =
+              BinaryOperation(binaryOperator = Div, left = IntegerAnswer(Some(23)), right = IntegerAnswer(Some(54)))
           ),
           thenStatements = List(
             Question(id = "asd", label = "asd", BooleanType, expression = BooleanAnswer(None))
@@ -244,18 +249,18 @@ class QLFormParserTest extends FunSuite {
             id = "hasSoldHouse",
             label = "Did you sell a house in 2010?",
             IntegerType,
-            expression = IntAnswer(None)),
+            expression = IntegerAnswer(None)),
           Question(
             id = "houseBuyingPrice",
             label = "What was the buying price?",
             IntegerType,
-            expression = IntAnswer(Some(10000))
+            expression = IntegerAnswer(Some(10000))
           ),
           Question(
             id = "houseSellingPrice",
             label = "What was the selling price?",
             IntegerType,
-            expression = BinaryOperation(Sub, IntAnswer(Some(10000)), Reference("hasSoldHouse"))
+            expression = BinaryOperation(Sub, IntegerAnswer(Some(10000)), Reference("hasSoldHouse"))
           )
         )
       )
@@ -272,11 +277,11 @@ class QLFormParserTest extends FunSuite {
         List(
           Conditional(
             BooleanAnswer(Some(true)),
-            List(Question("firstIf", "FirstIf", DecimalType, DecAnswer(None)))
+            List(Question("firstIf", "FirstIf", DecimalType, DecimalAnswer(None)))
           ),
           Conditional(
             BooleanAnswer(Some(false)),
-            List(Question("firstElseIf", "FirstElseIf", IntegerType, IntAnswer(None)))
+            List(Question("firstElseIf", "FirstElseIf", IntegerType, IntegerAnswer(None)))
           ),
           Conditional(
             UnaryOperation(Neg, BooleanAnswer(Some(false))),

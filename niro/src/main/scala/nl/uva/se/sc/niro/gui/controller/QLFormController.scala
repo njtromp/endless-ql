@@ -11,9 +11,9 @@ import nl.uva.se.sc.niro.gui.application.QLForms
 import nl.uva.se.sc.niro.gui.control.{ Component, ComponentFactory }
 import nl.uva.se.sc.niro.gui.converter.ModelConverter
 import nl.uva.se.sc.niro.gui.listener.ComponentChangedListener
-import nl.uva.se.sc.niro.model.QLForm
-import nl.uva.se.sc.niro.model.expressions.answers.{ Answer, BooleanAnswer }
 import nl.uva.se.sc.niro.model.gui.{ GUIForm, GUIQuestion }
+import nl.uva.se.sc.niro.model.ql.QLForm
+import nl.uva.se.sc.niro.model.ql.expressions.answers.{ Answer, BooleanAnswer }
 
 import scala.collection.{ JavaConverters, mutable }
 

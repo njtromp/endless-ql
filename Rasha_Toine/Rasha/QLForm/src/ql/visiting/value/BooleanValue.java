@@ -45,9 +45,9 @@ public class BooleanValue extends AbstractValue {
 	@Override
 	public String getValueString() {
 		if(value == true)
-			return "true";
+			return "Yes";
 		else
-			return "false";
+			return "No";
 	}
 	
 	@Override

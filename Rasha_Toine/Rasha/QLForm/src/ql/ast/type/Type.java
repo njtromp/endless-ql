@@ -12,5 +12,6 @@ public abstract class Type extends AstNode {
 	public static final Type MONEY = new MoneyType();
 	public static final Type INTEGER = new IntegerType();
 
+	public abstract String getTypeString();
 	public abstract <T, U> T accept(TypeVisitor<T, U> visitor, U ctx);
 }

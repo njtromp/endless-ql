@@ -1,9 +1,9 @@
 package nl.uva.se.sc.niro.gui.factory
 
-import nl.uva.se.sc.niro.model.Question
-import nl.uva.se.sc.niro.model.expressions._
-import nl.uva.se.sc.niro.model.expressions.answers.Answer
 import nl.uva.se.sc.niro.model.gui.GUIQuestion
+import nl.uva.se.sc.niro.model.ql.Question
+import nl.uva.se.sc.niro.model.ql.expressions._
+import nl.uva.se.sc.niro.model.ql.expressions.answers.Answer
 import org.apache.logging.log4j.scala.Logging
 
 object GUIQuestionFactory extends Logging {

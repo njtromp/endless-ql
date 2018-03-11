@@ -162,6 +162,18 @@ public class QLSBaseListener implements QLSListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSpinboxType(QLSParser.SpinboxTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSpinboxType(QLSParser.SpinboxTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBooleanType(QLSParser.BooleanTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}

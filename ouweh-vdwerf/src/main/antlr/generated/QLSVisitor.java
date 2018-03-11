@@ -90,6 +90,13 @@ public interface QLSVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTextType(QLSParser.TextTypeContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code spinboxType}
+	 * labeled alternative in {@link QLSParser#widgetType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSpinboxType(QLSParser.SpinboxTypeContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code booleanType}
 	 * labeled alternative in {@link QLSParser#type}.
 	 * @param ctx the parse tree

@@ -40,7 +40,10 @@ namespace QuestionaireOrchestration.API
                     m_astCreator.Create(example);
                 }
 
-                foreach (var questionnaireRootNode in m_domainItemLocator.GetAll<IQuestionnaireRootNode>())
+                var questionnaireRefs = m_domainItemLocator
+                    .GetAllRefs<IQuestionnaireRootNode>();
+
+                foreach (var questionnaireRootNode in questionnaireRefs)
                 {
                     if (m_modelCreator.Validate(questionnaireRootNode))
                     {

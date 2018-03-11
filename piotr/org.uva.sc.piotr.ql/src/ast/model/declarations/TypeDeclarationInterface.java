@@ -1,7 +1,7 @@
 package ast.model.declarations;
 
-import types.DataType;
+import ast.model.expressions.Expression;
 
 public interface TypeDeclarationInterface {
-    public DataType.Type toDataType();
+    public Expression.DataType toDataType();
 }

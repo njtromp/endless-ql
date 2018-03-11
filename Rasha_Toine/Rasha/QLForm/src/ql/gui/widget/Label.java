@@ -18,7 +18,7 @@ public class Label implements WidgetInterface {
 
 	// Configuration
 	private WidgetConfiguration config =  new WidgetConfiguration(
-			UIManager.getDefaults().getFont("Font"), Color.BLACK, new Dimension(120, 60));
+			UIManager.getDefaults().getFont("Label.font"), Color.BLACK, new Dimension(120, 60));
 	
 	// Constructor
 	public Label(String str) {
@@ -64,6 +64,6 @@ public class Label implements WidgetInterface {
 
 	@Override
 	public void setEditability(boolean editable) {
-		label.setEnabled(editable);
+		//TODO review this
 	}
 }

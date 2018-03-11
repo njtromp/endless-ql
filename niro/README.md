@@ -11,10 +11,10 @@ There are two ways to build the application.
 * Create a native executable application
 
 ### Create executable jar file
-Run `mvn jfx;jar` 
+Run `mvn jfx:jar` 
 
 ### Create executable native application
-Run `mvn jfx;native` 
+Run `mvn jfx:native` 
 
 ## How to run
 Depending on the exact type of executable you have build.

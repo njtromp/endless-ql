@@ -9,6 +9,8 @@ import org.uva.ql.gui.GUIHandler;
 import org.uva.ql.parsing.ASTBuilder;
 import org.uva.ql.validation.LogHandler;
 import org.uva.ql.validation.Validator;
+import org.uva.qls.QLSBuilder;
+import org.uva.qls.ast.Stylesheet;
 
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -24,6 +26,10 @@ public class App {
         String input = new InputHandler().readFile("input/default.ql");
         ASTBuilder builder = new ASTBuilder();
         Form form = builder.buildAST(input);
+
+        String qlsInput = new InputHandler().readFile("input/default.qls");
+        QLSBuilder QLSBuilder = new QLSBuilder();
+        Stylesheet stylesheet = QLSBuilder.buildAST(qlsInput);
 
         Validator validator = new Validator(form);
         validator.run();

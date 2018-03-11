@@ -140,6 +140,18 @@ public interface QLSListener extends ParseTreeListener {
 	 */
 	void exitTextType(QLSParser.TextTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code spinboxType}
+	 * labeled alternative in {@link QLSParser#widgetType}.
+	 * @param ctx the parse tree
+	 */
+	void enterSpinboxType(QLSParser.SpinboxTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code spinboxType}
+	 * labeled alternative in {@link QLSParser#widgetType}.
+	 * @param ctx the parse tree
+	 */
+	void exitSpinboxType(QLSParser.SpinboxTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code booleanType}
 	 * labeled alternative in {@link QLSParser#type}.
 	 * @param ctx the parse tree

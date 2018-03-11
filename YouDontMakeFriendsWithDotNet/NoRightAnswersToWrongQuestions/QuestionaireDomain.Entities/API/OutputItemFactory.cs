@@ -20,19 +20,34 @@ namespace QuestionaireDomain.Entities.API
         }
 
         public Reference<IQuestionnaireOutputItem> CreateQuestionnaireOutputItem(
-            string displayName, 
-            IList<IQuestionOutputItem> questions)
+            string displayName,
+            List<Reference<IQuestionOutputItem>> questions)
         {
             var questionnaireOutputItem= new QuestionnaireOutputItem(
                 m_ids.Next,
                 displayName) {Questions = questions };
 
-            return DomainItemRegistration<IQuestionnaireOutputItem>(questionnaireOutputItem);
+            return DomainItemRegistration<IQuestionnaireOutputItem>(
+                questionnaireOutputItem);
         }
 
-        public IQuestionOutputItem<T> CreateQuestionOutputItem<T>(string text, T value, bool isVisible, bool isReadonly)
+        public Reference<IQuestionOutputItem> CreateQuestionOutputItem(
+            string text, 
+            string value,
+            Type type,
+            bool isVisible, 
+            bool isReadonly)
         {
-            throw new NotImplementedException();
+            var questionOutputItem = new QuestionOutputItem(
+                m_ids.Next,
+                text,
+                type,
+                value,
+                isVisible,
+                isReadonly);
+
+            return DomainItemRegistration<IQuestionOutputItem>(
+                questionOutputItem);
         }
 
         private Reference<T> DomainItemRegistration<T>(T node) where T : IDomainItem

@@ -7,8 +7,8 @@ import javafx.scene.control._
 import javafx.scene.layout.{ HBox, VBox }
 import javafx.scene.text.Font
 import javafx.stage.{ Screen, Stage }
-import nl.uva.se.sc.niro.model.expressions.answers.{ Answer, IntAnswer }
-import nl.uva.se.sc.niro.model.{ QLForm, Question, Statement }
+import nl.uva.se.sc.niro.model.ql.expressions.answers.{ Answer, IntegerAnswer }
+import nl.uva.se.sc.niro.model.ql.{ QLForm, Question, Statement }
 import nl.uva.se.sc.niro.parser.QLFormParser
 import org.antlr.v4.runtime.CharStreams
 import org.apache.logging.log4j.scala.Logging
@@ -122,8 +122,8 @@ class REPL extends Application with Logging {
 
         val answer: Option[Answer] = dictionary.get(id)
         answer foreach {
-          case IntAnswer(Some(value)) => inputField.setText(value.toString)
-          case IntAnswer(None)        => ()
+          case IntegerAnswer(Some(value)) => inputField.setText(value.toString)
+          case IntegerAnswer(None)        => ()
         }
 
         inputField
@@ -131,7 +131,7 @@ class REPL extends Application with Logging {
           .addListener(new ChangeListener[String] {
             def changed(p1: ObservableValue[_ <: String], oldValue: String, newValue: String): Unit = {
               logger.debug(s"change event on question: $id")
-              val intAnswer = IntAnswer(Try(newValue.toInt).toOption)
+              val intAnswer = IntegerAnswer(Try(newValue.toInt).toOption)
 
               dictionary(id) = intAnswer
               val updatedDictionary = Evaluator.evaluate(qlForm, dictionary.toMap)

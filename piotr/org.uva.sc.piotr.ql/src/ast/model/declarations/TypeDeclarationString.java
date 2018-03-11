@@ -1,7 +1,7 @@
 package ast.model.declarations;
 
+import ast.model.expressions.Expression;
 import ast.visitors.ASTNodeVisitor;
-import types.DataType;
 
 public class TypeDeclarationString extends TypeDeclaration {
     public TypeDeclarationString(String identifier, MetaInformation metaInformation) {
@@ -14,7 +14,7 @@ public class TypeDeclarationString extends TypeDeclaration {
     }
 
     @Override
-    public DataType.Type toDataType() {
-        return DataType.Type.STRING;
+    public Expression.DataType toDataType() {
+        return Expression.DataType.STRING;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using QuestionaireDomain.Entities.API.Output;
 using QuestionaireDomain.Entities.DomainObjects;
 
@@ -6,13 +7,13 @@ namespace QuestionaireDomain.Entities.API
 {
     public interface IOutputItemFactory
     {
-        Reference<IQuestionnaireOutputItem> CreateQuestionnaireOutputItem(
-            string displayName,
-            IList<IQuestionOutputItem> questions);
+        Reference<IQuestionnaireOutputItem> CreateQuestionnaireOutputItem(string displayName,
+            List<Reference<IQuestionOutputItem>> questions);
 
-        IQuestionOutputItem<T> CreateQuestionOutputItem<T>(
+        Reference<IQuestionOutputItem> CreateQuestionOutputItem(
             string text,
-            T value,
+            string value,
+            Type type,
             bool isVisible,
             bool isReadonly);
    }

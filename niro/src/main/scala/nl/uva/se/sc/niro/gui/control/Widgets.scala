@@ -5,7 +5,6 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 import javafx.beans.value.{ ChangeListener, ObservableValue }
-import javafx.event.{ ActionEvent, EventHandler }
 import javafx.scene.control.{ CheckBox, Control, DatePicker, TextField }
 import javafx.util.converter.LocalDateStringConverter
 import nl.uva.se.sc.niro.gui.builder.TextFormatterBuilder
@@ -27,7 +26,7 @@ trait QLWidget[T] extends Control {
     valueChangedListeners.foreach(_.valueChanged(this))
 }
 
-class QLTextField() extends TextField with QLWidget[String] {
+abstract class AbstractQLTextField[T]() extends TextField with QLWidget[T] {
   focusedProperty().addListener(new ChangeListener[lang.Boolean] {
     override def changed(
         observable: ObservableValue[_ <: lang.Boolean],
@@ -35,21 +34,6 @@ class QLTextField() extends TextField with QLWidget[String] {
         newValue: lang.Boolean): Unit =
       if (oldValue) valueChanged
   })
-  textProperty().addListener(new ChangeListener[String] {
-    override def changed(observable: ObservableValue[_ <: String], oldValue: String, newValue: String): Unit =
-      valueChanged
-  })
-  override def setValue(value: String): Unit = setText(value)
-  override def getValue: String = getText
-}
-
-class QLDateField() extends DatePicker with QLWidget[LocalDate] {
-  valueProperty().addListener(new ChangeListener[LocalDate] {
-    override def changed(observable: ObservableValue[_ <: LocalDate], oldValue: LocalDate, newValue: LocalDate): Unit =
-      valueChanged
-  })
-  private val dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT)
-  setConverter(new LocalDateStringConverter(dateFormatter, dateFormatter))
 }
 
 class QLBooleanField extends CheckBox with QLWidget[Boolean] {
@@ -64,14 +48,21 @@ class QLBooleanField extends CheckBox with QLWidget[Boolean] {
   override def getValue: Boolean = isSelected
 }
 
-class QLIntegerField() extends TextField with QLWidget[java.lang.Integer] {
-  focusedProperty().addListener(new ChangeListener[lang.Boolean] {
-    override def changed(
-        observable: ObservableValue[_ <: lang.Boolean],
-        oldValue: lang.Boolean,
-        newValue: lang.Boolean): Unit =
-      if (oldValue) valueChanged
+class QLDateField() extends DatePicker with QLWidget[LocalDate] {
+  valueProperty().addListener(new ChangeListener[LocalDate] {
+    override def changed(observable: ObservableValue[_ <: LocalDate], oldValue: LocalDate, newValue: LocalDate): Unit =
+      valueChanged
   })
+  private val dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT)
+  setConverter(new LocalDateStringConverter(dateFormatter, dateFormatter))
+}
+
+class QLTextField() extends AbstractQLTextField[String] {
+  override def setValue(value: String): Unit = setText(value)
+  override def getValue: String = getText
+}
+
+class QLIntegerField() extends AbstractQLTextField[java.lang.Integer] {
   private val integerFormatter =
     TextFormatterBuilder[Integer]().buildInputFilter(INTEGER_MASK).buildIntegerConverter().build()
   setTextFormatter(integerFormatter)
@@ -79,14 +70,7 @@ class QLIntegerField() extends TextField with QLWidget[java.lang.Integer] {
   override def getValue: java.lang.Integer = integerFormatter.getValue
 }
 
-class QLDecimalField() extends TextField with QLWidget[java.math.BigDecimal] {
-  focusedProperty().addListener(new ChangeListener[lang.Boolean] {
-    override def changed(
-        observable: ObservableValue[_ <: lang.Boolean],
-        oldValue: lang.Boolean,
-        newValue: lang.Boolean): Unit =
-      if (oldValue) valueChanged
-  })
+class QLDecimalField() extends AbstractQLTextField[java.math.BigDecimal] {
   private val decimalFormatter =
     TextFormatterBuilder[java.math.BigDecimal]().buildInputFilter(DECIMAL_MASK).buildDecimalConverter().build()
   setTextFormatter(decimalFormatter)
@@ -94,14 +78,7 @@ class QLDecimalField() extends TextField with QLWidget[java.math.BigDecimal] {
   override def getValue: java.math.BigDecimal = decimalFormatter.getValue
 }
 
-class QLMoneyField() extends TextField with QLWidget[java.math.BigDecimal] {
-  focusedProperty().addListener(new ChangeListener[lang.Boolean] {
-    override def changed(
-        observable: ObservableValue[_ <: lang.Boolean],
-        oldValue: lang.Boolean,
-        newValue: lang.Boolean): Unit =
-      if (oldValue) valueChanged
-  })
+class QLMoneyField() extends AbstractQLTextField[java.math.BigDecimal] {
   private val decimalFormatter =
     TextFormatterBuilder[java.math.BigDecimal]().buildInputFilter(MONEY_MASK).buildDecimalConverter().build()
   setTextFormatter(decimalFormatter)

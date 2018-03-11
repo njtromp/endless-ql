@@ -1,7 +1,6 @@
 package ast.model.declarations;
 
 import ast.model.ASTNode;
-import types.DataType;
 
 public abstract class TypeDeclaration extends ASTNode implements TypeDeclarationInterface {
 

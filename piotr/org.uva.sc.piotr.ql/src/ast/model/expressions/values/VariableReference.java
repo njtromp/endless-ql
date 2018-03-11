@@ -16,10 +16,6 @@ public class VariableReference extends Expression {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Override
     public <T> T accept(ASTNodeVisitor<T> visitor) {
         return visitor.visit(this);

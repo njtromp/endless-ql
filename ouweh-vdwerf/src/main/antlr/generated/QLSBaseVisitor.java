@@ -103,6 +103,13 @@ public class QLSBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements QL
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitSpinboxType(QLSParser.SpinboxTypeContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitBooleanType(QLSParser.BooleanTypeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

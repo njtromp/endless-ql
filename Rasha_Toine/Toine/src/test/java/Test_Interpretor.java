@@ -1,10 +1,7 @@
 
 import static org.junit.Assert.assertEquals;
 
-import java.math.BigDecimal;
-
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.javatuples.Pair;
 import org.junit.Test;
 
 import nl.khonraad.domain.Type;

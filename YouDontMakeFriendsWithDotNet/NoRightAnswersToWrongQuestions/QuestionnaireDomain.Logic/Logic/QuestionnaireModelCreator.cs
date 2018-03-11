@@ -1,29 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using QuestionaireDomain.Entities.API;
 using QuestionaireDomain.Entities.API.AstNodes.Questionnaire;
+using QuestionaireDomain.Entities.DomainObjects;
 
 namespace QuestionnaireDomain.Logic.Logic
 {
     public class QuestionnaireModelCreator : IQuestionnaireModelCreator
     {
-        private readonly IOutputItemFactory m_outputItemFactory;
+        private readonly IBuildOutputVisitor m_buildOutputVisitor;
 
-        public QuestionnaireModelCreator(IOutputItemFactory outputItemFactory)
+        public QuestionnaireModelCreator(IBuildOutputVisitor buildOutputVisitor)
         {
-            m_outputItemFactory = outputItemFactory;
+            m_buildOutputVisitor = buildOutputVisitor;
         }
 
-        public bool Validate(IQuestionnaireRootNode questionnaireRootNode)
+        public bool Validate(Reference<IQuestionnaireRootNode> questionnaireRootNode)
         {
             //ToDo Make this work
             return true;
         }
 
-        public void Create(IQuestionnaireRootNode questionnaireRootNode)
+        public void Create(Reference<IQuestionnaireRootNode> questionnaireRootNode)
         {
-            m_outputItemFactory.CreateQuestionnaireOutputItem(
-                "John", new List<IQuestionOutputItem>());
+            m_buildOutputVisitor.Build(questionnaireRootNode);
         }
+
     }
 }

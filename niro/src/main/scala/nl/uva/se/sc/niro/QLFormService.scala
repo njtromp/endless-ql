@@ -3,7 +3,7 @@ package nl.uva.se.sc.niro
 import java.io.File
 
 import nl.uva.se.sc.niro.errors.Errors._
-import nl.uva.se.sc.niro.model.QLForm
+import nl.uva.se.sc.niro.model.ql.QLForm
 import nl.uva.se.sc.niro.parser.QLFormParser
 import nl.uva.se.sc.niro.typechecking.TypeChecker
 import org.antlr.v4.runtime.CharStreams
